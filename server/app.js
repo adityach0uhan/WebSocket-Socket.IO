@@ -1,42 +1,37 @@
-import express from "express";
-import { createServer } from 'http'
-import { Server } from "socket.io"
+import express from "express"
+import http from 'http'
+import cors from 'cors';
+import {Server} from 'socket.io'
+
 const app = express();
-const port = 5000;
-import cors from "cors"
-const server = createServer(app)
+const server = http.createServer(app);
+app.use(cors());
 
-app.use(cors())
-app.get('/', (req, res) => {
-    res.send("Home route")
-})
 
-const io = new Server(server,{
+const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173" ,
-        methods: ["GET", "POST"],
-        credentials: true, 
-    },
-});
-
+        origin: "http://localhost:5173/",
+        methods:['POST','GET'],
+    }
+})
 
 io.on("connection", (socket) => {
-    console.log(`Connected , User ID : ${socket.id}`,)
-    socket.emit("hello", `hello user  ${socket.id} `)
-    socket.broadcast.emit("hello",`${socket.id} has joined the server`)
+    
+    console.log(`Socket ${socket.id} is just connected`);
 
-
-
-
-    socket.on("disconnect", (socket) => {
-        console.log(`${socket.id} Disconnected`)
+    socket.on("disconnect", () => {
+        console.log(`User : ${socket.id} Disconnected`);
     })
-
+    
 })
 
 
 
 
-server.listen(port, () => {
-    console.log(`Server is runnnig on port ${port}`);
+
+
+
+
+server.listen(5000, () => {
+    console.log(`server is live on port 5000`);
 })
