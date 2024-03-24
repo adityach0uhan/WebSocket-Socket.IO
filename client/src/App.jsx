@@ -1,15 +1,24 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import io from 'socket.io-client'
-
+import Chat from './Chat'
 const App = () => {
   
   const socket = io.connect("http://localhost:5000/")
+
   const [username, setUsername] = useState("")
   const [roomId, setRoomId] = useState("")
  
-  const joinRoom = () => {
-    setUsername("")
-    setRoomId("")
+  const joinRoom = async() => {
+    
+    if (username !==" " && roomId !==" ") {
+      
+        await socket.emit("join_room", roomId)
+        // setUsername(" ")
+        // setRoomId(" ")
+      
+
+    }
+
   }
 
 
@@ -29,7 +38,7 @@ const App = () => {
 
 
         </div>
-
+        <Chat socket={socket} room={roomId} username={username} />
       </div>
     </>
   )
