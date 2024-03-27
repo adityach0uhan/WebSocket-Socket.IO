@@ -12,7 +12,7 @@ const Chat = ({ socket, roomId, username }) => {
             const Msgdata = {
                 roomId: roomId,
                 message: currentMsg,
-                time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
+                time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes() + ":" + new Date(Date.now()).getSeconds(),
                 author: username,
             };
             await socket.emit("send_message", Msgdata)
@@ -23,10 +23,9 @@ const Chat = ({ socket, roomId, username }) => {
     useEffect(() => {
 
         socket.on("receive_message", (data) => {
-            console.log("Front End ",data)
-            // setAllmessages((list)=>{[...list,data]})
+            setAllmessages((newMessage) => [...newMessage, data])
         })
-
+      
 
     }, [socket])
 
@@ -40,10 +39,10 @@ const Chat = ({ socket, roomId, username }) => {
                 {/* Chat box  */}
                 <div className='w-96 h-96 bg-blue-200 relative flex flex-col justify-center items-center'>
                     <div className='text-lg h-10 flex items-center justify-center  w-full bg-green-600 text-center top-0 absolute ' >{username}</div>
-                    <div className='bg-blue-300 w-full h-5 '>
+                    <div className='bg-blue-300 w-full h-full p-1 m-2  '>
                         {
-                            allMessages.map((item) => {
-                                return <p>{item.message}</p>
+                            allMessages.map((item,index) => {
+                                return <p className='text-xs' key={index}>{item.message}</p>
                             })
                         }
                     </div>

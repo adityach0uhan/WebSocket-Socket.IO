@@ -2,7 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react'
 import io from 'socket.io-client'
 import Chat from './Chat'
 const App = () => {
-  const socket = io.connect("http://localhost:5000/")
+  const socket = useMemo(() => io.connect("http://localhost:5000/"), []);
+
 
   const [username, setUsername] = useState("")
   const [chat, setChat] = useState(false)
