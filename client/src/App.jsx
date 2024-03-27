@@ -4,7 +4,6 @@ import Chat from './Chat'
 const App = () => {
   const socket = useMemo(() => io.connect("http://localhost:5000/"), []);
 
-
   const [username, setUsername] = useState("")
   const [chat, setChat] = useState(false)
   const [roomId, setRoomId] = useState("")
