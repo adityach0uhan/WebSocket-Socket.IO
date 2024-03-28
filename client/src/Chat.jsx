@@ -6,14 +6,13 @@ const Chat = ({ socket, roomId, username }) => {
 
     const [currentMsg, setcurrentMsg] = useState("")
     const [allMessages, setAllmessages] = useState([]);
-
     const sendMessage = async () => {
 
         if (currentMsg !== " ") {
             const Msgdata = {
                 roomId: roomId,
                 message: currentMsg,
-                time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes() ,
+                time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
                 author: username,
             };
             await socket.emit("send_message", Msgdata)
@@ -25,7 +24,10 @@ const Chat = ({ socket, roomId, username }) => {
     useEffect(() => {
 
         socket.on("receive_message", (data) => {
+
             setAllmessages((newMessage) => [...newMessage, data])
+
+
         })
 
 
@@ -35,23 +37,29 @@ const Chat = ({ socket, roomId, username }) => {
 
     return (
         <>
+
             <div className='w-screen h-screen relative flex-col  flex justify-center items-center '>
                 <div className='font-bold text-xl  w-full text-center mb-5 '>Live Chat  </div>
 
                 {/* Chat box  */}
                 <div className='w-80 h-96 border-black border p-2 overflow-hidden border-1 relative flex flex-col justify-center items-center'>
                     <div className='text-lg h-8 flex items-center justify-center  w-full bg-black text-white text-center top-0 absolute capitalize ' >{username}</div>
-                    <div className=' overflow-hidden w-full h-80 p-1 m-2  '>
+                    <div className=' overflow-y-scroll w-full h-80 p-1 m-2  '>
                         {
                             allMessages.map((item, index) => {
-
                                 return (
-                                    <div className='w-full p-2 bg-blue-400 rounded   overflow-hidden min-h-10 my-1'>
-                                        <div className='message p-0 m-0'>
-                                            <p className='messageText p-0 m-0' key={index}>{item.message}</p>
+                                    <div key={index} className=
+                                        {
+                                            (username !== item.author) ?
+                                                'p-2 bg-green-300 min-w-min flex flex-col rounded overflow-hidden min-h-10 my-1'
+                                                :
+                                                'p-2 bg-blue-300 min-w-min flex flex-col rounded overflow-hidden min-h-10 my-1'
+                                        }>
+                                        <div className='message p-0 m-0 min-w-min '>
+                                            <p className='messageText p-0 m-0 min-w-min' >{item.message}</p>
                                         </div>
-                                        <div className=' w-full mb-1'>
-                                            <p className='extraSmallText capitalize flex justify-end gap-1 items-center'><FaUser />{item.author} : <IoIosTime />{item.time}</p>
+                                        <div className=' mb-1 block min-w-min'>
+                                            <p className='extraSmallText capitalize min-w-min flex justify-end gap-1 items-center'><FaUser />{item.author} : <IoIosTime />{item.time}</p>
                                         </div>
                                     </div>
                                 )
